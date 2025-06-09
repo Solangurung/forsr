@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>9 Monthsary Surprise with Memories</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Segoe+UI&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('images/background-full.jpg') no-repeat center center fixed;
+      background-size: cover;
+      overflow-x: hidden;
+      position: relative;
+      /* cursor: none; */ /* Uncomment if you want to hide cursor */
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      margin-top: 50px;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 10;
+      display: none; /* Initially hidden */
+      outline: none;
+      background: rgba(255, 255, 255, 0.9);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    h1, h2,h3, p {
+      text-align: center;
+      margin: 1rem 0;
+      color: #333;
+    }
+
+    .card {
+      display: none;
+      padding: 1rem;
+      border-radius: 10px;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      margin-bottom: 1rem;
+    }
+
+    .card.active {
+      display: block;
+    }
+
+    .card:nth-child(1) { background-color: #ffe4e1; }
+    .card:nth-child(2) { background-color: #e0f7fa; }
+    .card:nth-child(3) { background-color: #fff9c4; }
+
+    #petals-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .petal {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: url('https://img.freepik.com/free-vector/purple-daisy-nature_24877-81723.jpg?semt=ais_hybrid&w=740') no-repeat center center;
+      background-size: contain;
+      opacity: 0.8;
+      animation-name: fall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .bouquet {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 80px;
+      animation: sway 4s ease-in-out infinite;
+      z-index: 12;
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: rotate(0deg);}
+      50% { transform: rotate(8deg);}
+    }
+
+    /* Flower trail */
+    .flower {
+      position: absolute;
+      pointer-events: none;
+      filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5));
+      animation: fadeInOut 2s linear infinite;
+      width: 40px;
+      height: 40px;
+    }
+
+    .flower::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://c7.uihere.com/files/45/29/180/roses-flowers-red-forest.jpg') no-repeat center center;
+      background-size: contain;
+      animation: move 2s linear infinite;
+      display: block;
+      pointer-events: none;
+    }
+
+    @keyframes move {
+      0% { transform: translate(0) rotate(0deg); }
+      100% { transform: translate(300px) rotate(360deg); }
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0; }
+      20%, 80% { opacity: 1; }
+    }
+
+    #slideshow {
+      width: 100%;
+      height: 200px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 10px;
+      position: relative;
+    }
+
+    #slideshow img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      border-radius: 12px;
+    }
+
+    #slideshow img.active {
+      opacity: 1;
+    }
+
+    .memories-label {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 1.1rem;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Petals animation container -->
+  <div id="petals-container"></div>
+
+  <!-- Main container -->
+  <div class="container" role="main" aria-live="polite" aria-atomic="true" tabindex="0" title="Click to cycle messages">
+    <!-- Wishing messages card -->
+    <section id="messages-card" class="card active" role="region" aria-label="Wishing messages">
+      <h1>My Dearest Premula,</h1>
+      <p>Every day with you is a beautifully written story that I cherish deeply.</p>
+      <p>Your smile lights up the darkest days and fills my heart with warmth like nothing else can</p>
+      <p>Thank you for your love, your laughter, and for being my forever companion.</p>
+      <p>Happy 9 Monthsary! Here’s to many more memories together. 💖</p>
+    </section>
+
+    <!-- Memories card -->
+    <section id="memories-card" class="card" role="region" aria-label="Memories and apology">
+      <h2>Our Memories</h2>
+      <p class="memories-label">Moments we lived, forever in my heart 💖</p>
+      <div id="slideshow"></div>
+      <p style="margin-top: 1rem; font-style: italic; text-align: center;">
+        You mean the world to me. Thank you for being you, my love. ❤️
+      </p>
+    </section>
+
+    <!-- Apology card -->
+    <section id="apology-card" class="card" role="region" aria-label="Apology message">
+      <h2>From my heart...</h2>
+      <p>I'm truly sorry my luv  </p>
+      <p>Your smile has always had the power to brighten even my darkest days and warm my heart in a way no one else can.</p>
+      <p> And babe You mean so much to me, and I promise to do better my luv a.</p>
+      <p>I love you, meri maya,jann,buuriii ❤️</p>
+      <h3>Happy 9 Monthsary, Premula! 🥰</h3>
+      
+    </section>
+  </div>
+
+  <!-- Bouquet -->
+  <svg class="bouquet" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <circle cx="32" cy="32" r="30" stroke="#c0392b" stroke-width="3"/>
+    <path d="M32 10 L32 54" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="32" cy="18" r="8" fill="#e74c3c"/>
+  </svg>
+
+  <!-- Music -->
+  <audio id="music" src="audio/WhatsApp Audio 2025-05-25 at 19.45.26_daaee7ae.mp3" preload="auto"></audio>
+
+  <script>
+    // Petals animation
+    const petalsContainer = document.getElementById('petals-container');
+    const petalCount = 25;
+
+    function randomRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    for(let i = 0; i < petalCount; i++) {
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      petal.style.left = randomRange(0, 100) + 'vw';
+      petal.style.animationDuration = randomRange(7, 14) + 's';
+      petal.style.animationDelay = (i * 0.5) + 's';
+      petalsContainer.appendChild(petal);
+    }
+
+    // Card elements & state
+    const cards = Array.from(document.querySelectorAll('.card'));
+    let currentIndex = 0;
+
+    function showCard(index) {
+      cards.forEach((card, i) => {
+        card.classList.toggle('active', i === index);
+      });
+      console.log("Showing card index:", index);
+    }
+
+    // Reveal main content on first click or timeout, then cycle cards on subsequent clicks
+    let revealed = false;
+    const container = document.querySelector('.container');
+    const music = document.getElementById('music');
+
+    function showMainContent() {
+      petalsContainer.style.display = 'none';
+      container.style.display = 'block';
+      container.focus();
+      music.play().catch(() => {
+        // Autoplay might be blocked; user can click again to play
+      });
+      revealed = true;
+      document.removeEventListener('click', onDocumentClick);
+      clearTimeout(timeoutId);
+      console.log("Main content revealed");
+      showCard(0);  // Show first card on reveal
+    }
+
+    function onDocumentClick() {
+      if (!revealed) {
+        showMainContent();
+      }
+    }
+    document.addEventListener('click', onDocumentClick);
+
+    const timeoutId = setTimeout(showMainContent, 7000);
+
+    // Cycle cards on container click after reveal
+    container.addEventListener('click', () => {
+      if (!revealed) return; // ignore clicks before reveal
+      currentIndex = (currentIndex + 1) % cards.length;
+      showCard(currentIndex);
+    });
+
+    // Slideshow
+    const slideshow = document.getElementById('slideshow');
+    const imageSources = [
+      'images/WhatsApp Image 2025-06-08 at 19.20.12_4cabb705.jpg',
+      'images/WhatsApp Image 2025-06-07 at 21.57.34_84265819.jpg',
+      'images/WhatsApp Image 2025-06-07 at 21.49.25_bfdb4ba8.jpg'
+    ];
+    let slideIndex = 0;
+
+    imageSources.forEach((src, i) => {
+      const img = document.createElement('img');
+      img.src = src;
+      if (i === 0) img.classList.add('active');
+      slideshow.appendChild(img);
+    });
+
+    setInterval(() => {
+      const images = slideshow.querySelectorAll('img');
+      images[slideIndex].classList.remove('active');
+      slideIndex = (slideIndex + 1) % images.length;
+      images[slideIndex].classList.add('active');
+    }, 3000);
+
+    // Flower trail - throttle creation for performance
+    let lastFlowerTime = 0;
+    document.addEventListener("mousemove", function (e) {
+      let now = Date.now();
+      if (now - lastFlowerTime > 100) { // max every 100ms
+        lastFlowerTime = now;
+        let body = document.body;
+        let flower = document.createElement("div");
+        let x = e.clientX;
+        let y = e.clientY;
+
+        flower.className = "flower";
+        flower.style.left = x + "px";
+        flower.style.top = y + "px";
+
+        let size = Math.random() * 80;
+        flower.style.width = 20 + size + "px";
+        flower.style.height = 20 + size + "px";
+
+        let rotation = Math.random() * 360;
+        flower.style.transform = `rotate(${rotation}deg)`;
+
+        body.appendChild(flower);
+
+        setTimeout(function () {
+          flower.remove();
+        }, 9000);
+      }
+    });
+  </script>
+</body>
+</html>
